@@ -18,6 +18,10 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _reactHtmlConverter = require('react-html-converter');
+
+var _reactHtmlConverter2 = _interopRequireDefault(_reactHtmlConverter);
+
 var _draggableTrack = require('./draggable-track.jsx');
 
 var _draggableTrack2 = _interopRequireDefault(_draggableTrack);
@@ -88,6 +92,9 @@ var Slider = function (_React$Component) {
             if (this.props.children) {
                 this.setState({ renderChildren: true });
                 this.props.setSlides(this.props.children);
+            } else if (this.props.slidesHTML) {
+                var slides = new _reactHtmlConverter2.default().convert(this.props.slidesHTML);
+                this.props.setSlides(slides);
             }
         }
     }, {
@@ -231,7 +238,7 @@ Slider.propTypes = {
 Slider.defaultProps = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    fade: true,
+    fade: false,
     fadeDuration: 500,
     showArrows: true
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import ReactHTMLConverter from 'react-html-converter';
 import DraggableTrack from './draggable-track.jsx';
 import SlideTrack from './slide-track.jsx';
 import SliderNavigation from './slider-navigation.jsx';
@@ -43,6 +44,9 @@ class Slider extends React.Component {
         if (this.props.children) {
             this.setState({ renderChildren: true });
             this.props.setSlides(this.props.children);
+        } else if (this.props.slidesHTML) {
+            const slides = (new ReactHTMLConverter()).convert(this.props.slidesHTML);
+            this.props.setSlides(slides);
         }
     }
 
