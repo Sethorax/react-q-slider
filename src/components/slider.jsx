@@ -133,7 +133,7 @@ class Slider extends React.Component {
     render() {
         return (
             this.props.slides.length > 0 && (
-                <div className={classNames('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical })} ref={this.handleSliderRef.bind(this)}>
+                <div className={classNames('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical, 'q-slider__slider_no-sliding': this.props.slides.length <= this.props.slidesToShow })} ref={this.handleSliderRef.bind(this)}>
                     <DraggableTrack
                         vertical={this.props.vertical}
                         getSliderWidth={this.getSliderWidth.bind(this)}

@@ -34,16 +34,8 @@ var SliderNavigation = function (_React$Component) {
     _createClass(SliderNavigation, [{
         key: 'render',
         value: function render() {
-            var NextArrow = this.props.nextArrow ? _react2.default.cloneElement(this.props.nextArrow, { onClick: this.props.onNextClick }) : _react2.default.createElement(
-                'button',
-                { onClick: this.props.onNextClick },
-                'Next'
-            );
-            var PrevArrow = this.props.prevArrow ? _react2.default.cloneElement(this.props.prevArrow, { onClick: this.props.onPrevClick }) : _react2.default.createElement(
-                'button',
-                { onClick: this.props.onPrevClick },
-                'Prev'
-            );
+            var NextArrow = this.props.nextArrow ? _react2.default.cloneElement(this.props.nextArrow, { onClick: this.props.onNextClick }) : _react2.default.createElement('div', { className: 'q-slider__arrow q-slider__arrow_next', onClick: this.props.onNextClick });
+            var PrevArrow = this.props.prevArrow ? _react2.default.cloneElement(this.props.prevArrow, { onClick: this.props.onPrevClick }) : _react2.default.createElement('div', { className: 'q-slider__arrow q-slider__arrow_prev', onClick: this.props.onPrevClick });
 
             return _react2.default.createElement(
                 'div',
