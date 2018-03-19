@@ -194,7 +194,7 @@ var Slider = function (_React$Component) {
         value: function render() {
             return this.props.slides.length > 0 && _react2.default.createElement(
                 'div',
-                { className: (0, _classnames2.default)('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical }), ref: this.handleSliderRef.bind(this) },
+                { className: (0, _classnames2.default)('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical, 'q-slider__slider_no-sliding': this.props.slides.length <= this.props.slidesToShow }), ref: this.handleSliderRef.bind(this) },
                 _react2.default.createElement(
                     _draggableTrack2.default,
                     {

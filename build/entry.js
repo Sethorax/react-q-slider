@@ -11,11 +11,7 @@ ReactDOM.render(
         <img src="https://picsum.photos/900/600/?image=174" />
         <img src="https://picsum.photos/900/600/?image=542" />
         <img src="https://picsum.photos/900/600/?image=347" />
-        <img src="https://picsum.photos/900/600/?image=75" />
-        <img src="https://picsum.photos/900/600/?image=541" />
-        <img src="https://picsum.photos/900/600/?image=174" />
-        <img src="https://picsum.photos/900/600/?image=542" />
-        <img src="https://picsum.photos/900/600/?image=347" />
+        
     </QSlider>
 , document.querySelector('.imageslider'));
 
