@@ -172,12 +172,12 @@ var Slider = function (_React$Component) {
     }, {
         key: 'handlePrevClick',
         value: function handlePrevClick() {
-            if (this.props.rewindOnEnd || this.canGoPrev()) this.gotoPrev();
+            if (this.props.slides.length >= this.props.slidesToShow && this.props.rewindOnEnd || this.canGoPrev()) this.gotoPrev();
         }
     }, {
         key: 'handleNextClick',
         value: function handleNextClick() {
-            if (this.props.rewindOnEnd || this.canGoNext()) this.gotoNext();
+            if (this.props.slides.length >= this.props.slidesToShow && this.props.rewindOnEnd || this.canGoNext()) this.gotoNext();
         }
     }, {
         key: 'getSliderWidth',
@@ -208,7 +208,8 @@ var Slider = function (_React$Component) {
                         vertical: this.props.vertical,
                         fade: this.props.fade,
                         slidesToShow: this.props.slidesToShow,
-                        fadeDuration: this.props.fadeDuration
+                        fadeDuration: this.props.fadeDuration,
+                        onSlideClick: this.props.onSlideClick
                     })
                 ),
                 this.props.showArrows && _react2.default.createElement(_sliderNavigation2.default, {
@@ -227,12 +228,14 @@ var Slider = function (_React$Component) {
 Slider.propTypes = {
     slidesToShow: _propTypes2.default.number,
     slidesToScroll: _propTypes2.default.number,
+    slidesHTML: _propTypes2.default.string,
     rewindOnEnd: _propTypes2.default.bool,
     fade: _propTypes2.default.bool,
     fadeDuration: _propTypes2.default.number,
     showArrows: _propTypes2.default.bool,
     nextArrow: _propTypes2.default.element,
-    prevArrow: _propTypes2.default.element
+    prevArrow: _propTypes2.default.element,
+    onSlideClick: _propTypes2.default.func
 };
 
 Slider.defaultProps = {
@@ -240,7 +243,8 @@ Slider.defaultProps = {
     slidesToScroll: 1,
     fade: false,
     fadeDuration: 500,
-    showArrows: true
+    showArrows: true,
+    onSlideClick: function onSlideClick() {}
 };
 
 exports.default = (0, _react3.connect)(['slides', 'isGrabbing', 'currentSlide', 'grabbedTrackOffset', 'isFading'], _actions2.default)(Slider);
