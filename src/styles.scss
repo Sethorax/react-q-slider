@@ -2,7 +2,8 @@
     & {width: 1200px; margin-left: auto; margin-right: auto;}
 
     &__slider {position: relative; width: 100%; padding: 0 50px;}
-    &__slide {flex: none; pointer-events: none;}
+    &__slide {flex: none;}
+    &__slide > * {pointer-events: none;}
 
     &__slider_is-vertical {
         img {width: auto; height: 100%;}

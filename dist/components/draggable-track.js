@@ -51,6 +51,8 @@ var DraggableTrack = function (_React$Component) {
     }, {
         key: 'handleMouseTouchDown',
         value: function handleMouseTouchDown(event) {
+            if (this.props.slides.length <= this.props.slidesToShow) return;
+
             var clientX = _utils2.default.getClientPosFromTouchOrMouseEvent(event, this.props.vertical);
 
             this.grabbedStartingX = clientX;
@@ -59,7 +61,7 @@ var DraggableTrack = function (_React$Component) {
     }, {
         key: 'handleMouseTouchMove',
         value: function handleMouseTouchMove(event) {
-            if (!this.props.isGrabbing) return;
+            if (!this.props.isGrabbing || this.props.slides.length <= this.props.slidesToShow) return;
 
             var clientX = _utils2.default.getClientPosFromTouchOrMouseEvent(event, this.props.vertical);
             var distance = (this.grabbedStartingX - clientX) * 100 / this.props.getSliderWidth();
@@ -68,6 +70,8 @@ var DraggableTrack = function (_React$Component) {
     }, {
         key: 'handleMouseTouchUp',
         value: function handleMouseTouchUp() {
+            if (this.props.slides.length <= this.props.slidesToShow) return;
+
             this.grabbedStartingX = 0;
 
             var draggedSlides = parseFloat(this.props.grabbedTrackOffset) / (100 / parseInt(this.props.slidesToShow));
@@ -102,4 +106,4 @@ var DraggableTrack = function (_React$Component) {
     return DraggableTrack;
 }(_react2.default.Component);
 
-exports.default = (0, _react3.connect)(['isGrabbing', 'grabbedTrackOffset', 'currentSlide'], _actions2.default)(DraggableTrack);
+exports.default = (0, _react3.connect)(['isGrabbing', 'grabbedTrackOffset', 'currentSlide', 'slides'], _actions2.default)(DraggableTrack);

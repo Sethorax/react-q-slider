@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'unistore/react';
+import Utils from '../utils';
 import actions from '../actions';
 
 /**
@@ -22,6 +23,24 @@ class SlideTrack extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.onClickStartX = 0;
+        this.onClickStartY = 0;
+    }
+
+    handleSlideMouseTouchDown(event) {
+        this.onClickStartX = Utils.getClientPosFromTouchOrMouseEvent(event);
+        this.onClickStartY = Utils.getClientPosFromTouchOrMouseEvent(event, true);
+    }
+
+    handleSlideClick(event, index) {
+        if (this.onClickStartX !== Utils.getClientPosFromTouchOrMouseEvent(event) || this.onClickStartY !== Utils.getClientPosFromTouchOrMouseEvent(event, true)) return;
+
+        if (typeof this.props.onSlideClick === 'function') {
+            this.props.onSlideClick(event, index);
+        }
+    }
+
     renderSlidingTrack() {
         const slideWidth = 100 / this.props.slidesToShow;
         const trackOffset = (slideWidth * this.props.currentSlide * -1) - this.props.grabbedTrackOffset;
@@ -32,7 +51,7 @@ class SlideTrack extends React.Component {
                 style={{ transform: this.props.vertical ? `translate3d(0, ${trackOffset}%, 0)` : `translate3d(${trackOffset}%, 0, 0)` }}
             >
                 {this.props.slides.map((slide, index) => (
-                    <div key={index} className="q-slider__slide" style={this.props.vertical ? { height: `${slideWidth}%` } : { width: `${slideWidth}%` }}>{slide}</div>
+                    <div key={index} onMouseDown={this.handleSlideMouseTouchDown.bind(this)} onTouchStart={this.handleSlideMouseTouchDown.bind(this)} onClick={event => this.handleSlideClick.bind(this)(event, index)} className="q-slider__slide" data-slide-index={index} style={this.props.vertical ? { height: `${slideWidth}%` } : { width: `${slideWidth}%` }}>{slide}</div>
                 ))}
             </div>
         );

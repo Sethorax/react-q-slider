@@ -146,6 +146,7 @@ class Slider extends React.Component {
                             fade={this.props.fade}
                             slidesToShow={this.props.slidesToShow}
                             fadeDuration={this.props.fadeDuration}
+                            onSlideClick={this.props.onSlideClick}
                         />
                     </DraggableTrack>
                     
@@ -166,12 +167,14 @@ class Slider extends React.Component {
 Slider.propTypes = {
     slidesToShow: PropTypes.number,
     slidesToScroll: PropTypes.number,
+    slidesHTML: PropTypes.string,
     rewindOnEnd: PropTypes.bool,
     fade: PropTypes.bool,
     fadeDuration: PropTypes.number,
     showArrows: PropTypes.bool,
     nextArrow: PropTypes.element,
-    prevArrow: PropTypes.element
+    prevArrow: PropTypes.element,
+    onSlideClick: PropTypes.func
 };
 
 Slider.defaultProps = {
@@ -179,7 +182,8 @@ Slider.defaultProps = {
     slidesToScroll: 1,
     fade: false,
     fadeDuration: 500,
-    showArrows: true
+    showArrows: true,
+    onSlideClick: () => {}
 };
 
 export default connect(['slides', 'isGrabbing', 'currentSlide', 'grabbedTrackOffset', 'isFading'], actions)(Slider);
