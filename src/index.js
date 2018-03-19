@@ -13,9 +13,15 @@ import './styles.scss';
  */
 export default class QSlider extends React.Component {
     render() {
+        const props = {
+            ...this.props,
+            slidesToScroll: this.props.fade ? 1 : this.props.slidesToScroll,
+            slidesToShow: this.props.fade ? 1 : this.props.slidesToShow
+        };
+
         return (
             <Provider store={createNewStore()}>
-                <Slider {...this.props}>
+                <Slider {...props}>
                     {this.props.children}
                 </Slider>
             </Provider>
