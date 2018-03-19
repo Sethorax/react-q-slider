@@ -173,7 +173,7 @@ Slider.propTypes = {
 Slider.defaultProps = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    fade: true,
+    fade: false,
     fadeDuration: 500,
     showArrows: true
 };
