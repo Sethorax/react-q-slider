@@ -115,11 +115,11 @@ class Slider extends React.Component {
     }
 
     handlePrevClick() {
-        if (this.props.rewindOnEnd || this.canGoPrev()) this.gotoPrev();
+        if ((this.props.slides.length >= this.props.slidesToShow && this.props.rewindOnEnd) || this.canGoPrev()) this.gotoPrev();
     }
 
     handleNextClick() {
-        if (this.props.rewindOnEnd || this.canGoNext()) this.gotoNext();
+        if ((this.props.slides.length >= this.props.slidesToShow && this.props.rewindOnEnd) || this.canGoNext()) this.gotoNext();
     }
 
     getSliderWidth() {

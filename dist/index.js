@@ -40,26 +40,73 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var QSlider = function (_React$Component) {
     _inherits(QSlider, _React$Component);
 
-    function QSlider() {
+    function QSlider(props) {
         _classCallCheck(this, QSlider);
 
-        return _possibleConstructorReturn(this, (QSlider.__proto__ || Object.getPrototypeOf(QSlider)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (QSlider.__proto__ || Object.getPrototypeOf(QSlider)).call(this, props));
+
+        var initialProps = _extends({}, props, {
+            slidesToScroll: props.fade ? 1 : props.slidesToScroll,
+            slidesToShow: props.fade ? 1 : props.slidesToShow
+        });
+
+        _this.state = {
+            ready: false,
+            initialProps: _extends({}, initialProps),
+            currentProps: initialProps
+        };
+        return _this;
     }
 
     _createClass(QSlider, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.watchBreakpoints();
+        }
+    }, {
+        key: 'watchBreakpoints',
+        value: function watchBreakpoints() {
+            var _this2 = this;
+
+            if (this.props.breakpoints) {
+                var onMediaQueryChange = function onMediaQueryChange(mediaQuery, settings) {
+                    if (!mediaQuery.matches) return;
+
+                    var newProps = settings !== null ? settings : _this2.state.initialProps;
+                    _this2.setState({ currentProps: Object.assign(_this2.state.currentProps, newProps) });
+                };
+
+                var registerMediaQuery = function registerMediaQuery(queryString, settings) {
+                    var mediaQuery = window.matchMedia(queryString);
+                    mediaQuery.addListener(function () {
+                        return onMediaQueryChange(mediaQuery, settings);
+                    });
+                    onMediaQueryChange(mediaQuery, settings);
+                };
+
+                var lastBreakpoint = -1;
+                var breakpoints = Object.keys(this.props.breakpoints).sort(function (a, b) {
+                    return a - b;
+                });
+                breakpoints.forEach(function (key, index) {
+                    registerMediaQuery('(min-width: ' + (parseInt(lastBreakpoint) + 1) + 'px) and (max-width: ' + key + 'px)', _this2.props.breakpoints[key]);
+                    lastBreakpoint = key;
+                });
+
+                registerMediaQuery('(min-width: ' + (parseInt(lastBreakpoint) + 1) + 'px)', null);
+            }
+
+            this.setState({ ready: true });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var props = _extends({}, this.props, {
-                slidesToScroll: this.props.fade ? 1 : this.props.slidesToScroll,
-                slidesToShow: this.props.fade ? 1 : this.props.slidesToShow
-            });
-
-            return _react2.default.createElement(
+            return this.state.ready && _react2.default.createElement(
                 _react3.Provider,
                 { store: (0, _store.createNewStore)() },
                 _react2.default.createElement(
                     _slider2.default,
-                    props,
+                    this.state.currentProps,
                     this.props.children
                 )
             );

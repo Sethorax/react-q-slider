@@ -8,15 +8,13 @@ ReactDOM.render(
         slidesToScroll={1}
         rewindOnEnd={true}
         onSlideClick={(event, index) => console.log(event)}
+        breakpoints={{
+            1200: { slidesToShow: 2, slidesToScroll: 2 },
+            600: { slidesToShow: 1 }
+        }}
     >
         <img src="https://picsum.photos/900/600/?image=174" />
         <img src="https://picsum.photos/900/600/?image=542" />
-        <img src="https://picsum.photos/900/600/?image=347" />
-        <img src="https://picsum.photos/900/600/?image=75" />
-        <img src="https://picsum.photos/900/600/?image=541" />
-        <img src="https://picsum.photos/900/600/?image=174" />
-        <img src="https://picsum.photos/900/600/?image=542" />
-        <img src="https://picsum.photos/900/600/?image=347" />
     </QSlider>
 , document.querySelector('.imageslider'));
 

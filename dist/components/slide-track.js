@@ -20,6 +20,10 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 var _react3 = require('unistore/react');
 
+var _utils = require('../utils');
+
+var _utils2 = _interopRequireDefault(_utils);
+
 var _actions = require('../actions');
 
 var _actions2 = _interopRequireDefault(_actions);
@@ -56,6 +60,27 @@ var SlideTrack = function (_React$Component) {
     }
 
     _createClass(SlideTrack, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.onClickStartX = 0;
+            this.onClickStartY = 0;
+        }
+    }, {
+        key: 'handleSlideMouseTouchDown',
+        value: function handleSlideMouseTouchDown(event) {
+            this.onClickStartX = _utils2.default.getClientPosFromTouchOrMouseEvent(event);
+            this.onClickStartY = _utils2.default.getClientPosFromTouchOrMouseEvent(event, true);
+        }
+    }, {
+        key: 'handleSlideClick',
+        value: function handleSlideClick(event, index) {
+            if (this.onClickStartX !== _utils2.default.getClientPosFromTouchOrMouseEvent(event) || this.onClickStartY !== _utils2.default.getClientPosFromTouchOrMouseEvent(event, true)) return;
+
+            if (typeof this.props.onSlideClick === 'function') {
+                this.props.onSlideClick(event, index);
+            }
+        }
+    }, {
         key: 'renderSlidingTrack',
         value: function renderSlidingTrack() {
             var _this2 = this;
@@ -72,7 +97,9 @@ var SlideTrack = function (_React$Component) {
                 this.props.slides.map(function (slide, index) {
                     return _react2.default.createElement(
                         'div',
-                        { key: index, className: 'q-slider__slide', style: _this2.props.vertical ? { height: slideWidth + '%' } : { width: slideWidth + '%' } },
+                        { key: index, onMouseDown: _this2.handleSlideMouseTouchDown.bind(_this2), onTouchStart: _this2.handleSlideMouseTouchDown.bind(_this2), onClick: function onClick(event) {
+                                return _this2.handleSlideClick.bind(_this2)(event, index);
+                            }, className: 'q-slider__slide', 'data-slide-index': index, style: _this2.props.vertical ? { height: slideWidth + '%' } : { width: slideWidth + '%' } },
                         slide
                     );
                 })
