@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 
 /**
  * WEBPACK CONFIG
@@ -8,7 +9,7 @@ const webpack = require('webpack');
 module.exports = env => {
     return {
         entry: {
-            index: './build/entry.js'
+            index: (env === 'production') ? './src/index.js' : './build/entry.js',
         },
         module: {
             rules: [
@@ -43,6 +44,7 @@ module.exports = env => {
         },
         mode: (env === 'dev') ? 'development' : 'production',
         plugins: [],
+        externals: (env === 'dev') ? {} : nodeExternals(),
         output: {
             filename: 'react-q-slider.js',
             chunkFilename: '[name].js',

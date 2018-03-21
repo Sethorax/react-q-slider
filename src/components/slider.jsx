@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ReactHTMLConverter from 'react-html-converter';
+import ReactHTMLConverter from 'react-html-converter/browser';
 import DraggableTrack from './draggable-track.jsx';
 import SlideTrack from './slide-track.jsx';
 import SliderNavigation from './slider-navigation.jsx';
+import SliderPagination from './slider-pagination.jsx';
 import { connect } from 'unistore/react';
 import actions from '../actions';
-
 
 /**
  * Slider Component
@@ -32,11 +32,21 @@ class Slider extends React.Component {
 
     componentWillMount() {
         this.slider = null;
+        this.autoplayPaused = false;
+        this.autoplayCycle = null;
+        this.lastAuoplayCycleStart = 0;
+        this.remainingAutoplayCycleDuration = 0;
 
         this.setMaxSlideOffset();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
+        if (!prevProps.autoplay && this.props.autoplay) {
+            this.startAutoplay();
+        } else if (prevProps.autoplay && !this.props.autoplay) {
+            this.stopAutoplay();
+        }
+
         this.setMaxSlideOffset();
     }
 
@@ -48,6 +58,28 @@ class Slider extends React.Component {
             const slides = (new ReactHTMLConverter()).convert(this.props.slidesHTML);
             this.props.setSlides(slides);
         }
+
+        if (this.props.autoplay) {
+            this.startAutoplay();
+        }
+    }
+
+    startAutoplay() {
+        const cycleDuration = this.remainingAutoplayCycleDuration > 0 && this.remainingAutoplayCycleDuration < this.props.autoplaySpeed ? this.remainingAutoplayCycleDuration : this.props.autoplaySpeed;
+        this.runAutoplayCycle(cycleDuration);
+    }
+
+    stopAutoplay() {
+        this.remainingAutoplayCycleDuration = (new Date()).getTime() - this.lastAuoplayCycleStart;
+        clearTimeout(this.autoplayCycle);
+    }
+
+    runAutoplayCycle(cycleDuration = 1000) {
+        this.autoplayCycle = setTimeout(() => {
+            this.lastAuoplayCycleStart = (new Date()).getTime();
+            this.runAutoplayCycle();
+            this.handleNextClick();
+        }, cycleDuration);
     }
 
     setMaxSlideOffset() {
@@ -122,6 +154,12 @@ class Slider extends React.Component {
         if ((this.props.slides.length >= this.props.slidesToShow && this.props.rewindOnEnd) || this.canGoNext()) this.gotoNext();
     }
 
+    handlePaginationItemClick(event, key) {
+        if (this.props.slides.length < this.props.slidesToShow) return;
+
+        this.gotoSlide(key);
+    }
+
     getSliderWidth() {
         return this.slider.getBoundingClientRect().width;
     }
@@ -133,7 +171,7 @@ class Slider extends React.Component {
     render() {
         return (
             this.props.slides.length > 0 && (
-                <div className={classNames('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical, 'q-slider__slider_no-sliding': this.props.slides.length <= this.props.slidesToShow })} ref={this.handleSliderRef.bind(this)}>
+                <div onMouseEnter={this.stopAutoplay.bind(this)} onMouseLeave={this.startAutoplay.bind(this)} className={classNames('q-slider__slider', { 'q-slider__slider_is-vertical': this.props.vertical, 'q-slider__slider_no-sliding': this.props.slides.length <= this.props.slidesToShow })} ref={this.handleSliderRef.bind(this)}>
                     <DraggableTrack
                         vertical={this.props.vertical}
                         getSliderWidth={this.getSliderWidth.bind(this)}
@@ -158,6 +196,10 @@ class Slider extends React.Component {
                             prevArrow={this.props.prevArrow}
                         />
                     )}
+
+                    {this.props.showPagination && (
+                        <SliderPagination onPaginationItemClick={this.handlePaginationItemClick.bind(this)} />
+                    )}
                 </div>
             )
         );
@@ -174,7 +216,11 @@ Slider.propTypes = {
     showArrows: PropTypes.bool,
     nextArrow: PropTypes.element,
     prevArrow: PropTypes.element,
-    onSlideClick: PropTypes.func
+    showPagination: PropTypes.bool,
+    paginationItem: PropTypes.element,
+    onSlideClick: PropTypes.func,
+    autoplay: PropTypes.bool,
+    autoplaySpeed: PropTypes.number
 };
 
 Slider.defaultProps = {
@@ -183,6 +229,9 @@ Slider.defaultProps = {
     fade: false,
     fadeDuration: 500,
     showArrows: true,
+    showPagination: true,
+    autoplay: false,
+    autoplaySpeed: 1000,
     onSlideClick: () => {}
 };
 

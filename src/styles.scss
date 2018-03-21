@@ -30,4 +30,8 @@
     &__arrow_prev::before {left: 8px; transform: rotate(-45deg);}
     &__arrow_next {right: 0;}
     &__arrow_next::before {right: 8px; transform: rotate(135deg);}
+
+    &__pagination {display: flex;}
+    &__pagination-item {width: 12px; height: 12px; background: black; opacity: 0.5; margin: 0 3px; border-radius: 100%; transition: opacity 0.2s ease;}
+    &__pagination-item_is-current {opacity: 1;}
 }
